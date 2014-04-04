@@ -1,0 +1,16 @@
+$ORIGIN 113.87.134.in-addr.arpa
+$TTL 60
+@     IN     SOA    dns1.example.com.     hostmaster.example.com. (
+                    2014042700 ; serial
+                    21600      ; refresh after 6 hours
+                    3600       ; retry after 1 hour
+                    604800     ; expire after 1 week
+                    86400 )    ; minimum TTL of 1 day
+
+      IN     NS     dns1.example.com.
+      IN     NS     dns2.example.com.
+
+5    IN     PTR    server1.example.com.
+7    IN     PTR    server2.example.com.
+
+

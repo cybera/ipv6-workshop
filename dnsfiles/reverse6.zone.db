@@ -1,0 +1,18 @@
+; If you uncomment and fix the following line you can save some typing.
+; $ORIGIN <prefix_here>.ip6.arpa.
+; eg. for a prefix of 2607:f8f0:690:0070::
+; $ORIGIN 0.7.0.0.0.9.6.0.0.f.8.f.7.0.6.2.ip6.arpa.
+; requires you only to enter the other 16 bits instead of all 32.
+$TTL 60
+@     IN     SOA    dns1.example.com.     hostmaster.example.com. (
+                    2014042700 ; serial
+                    21600      ; refresh after 6 hours
+                    3600       ; retry after 1 hour
+                    604800     ; expire after 1 week
+                    86400 )    ; minimum TTL of 1 day
+
+      IN     NS     dns1.example.com.
+      IN     NS     dns2.example.com.
+
+;1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.0.0.9.6.0.0.f.8.f.7.0.6.2.ip6.arpa    IN  PTR ipv6example.example.com.
+

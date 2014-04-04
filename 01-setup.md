@@ -6,22 +6,23 @@ Each of these markdown files includes the notes, examples and walkthrough for us
 
 Code blocks will have a `#` or a `$` preceeding the lines. A `#` means the command should be run as root or by using sudo in front of it, whereas a `$` means a regular user can run this. While in our demo it's not imperative this be followed as we've made sure to include sudo in front of the commands that need to be run as root.
 
+## Basic Commands
+
+We're going to try and keep these demos as straight forward as possible so you'll need to make sure you're familiar with the following commands/programs:
+
+  * `ifconfig` or `ip a` - to read an IP address
+  * A text editor - eg. `vi`, `emacs`, or `nano`. Our examples will show `nano`.
+  * `less` - for viewing files
+
 ## Getting Going
 
-With our CentOS 5.5 VM we need to run a couple commands just to make sure we have all the necessary pieces. To make life easier we're using EPEL on top of CentOS to make installation of some newer pacakages more manageable.
+We're going to grab our scripts and documentation locally on our VM for running.
 
-    # wget http://mirror.its.dal.ca/pub/epel/5/i386/epel-release-5-4.noarch.rpm
-    # sudo rpm -Uvh ./epel-release-5.4.noarch.rpm
+    $ wget --no-check-certificate https://github.com/cybera/ipv6-workshop/archive/master.zip
+    $ unzip master
 
-    # sudo yum update
-    # sudo yum upgrade
+Be sure to record both your VM's IPv4 and IPv6 addresses (or use the `setIPs.sh` in the scripts folder)
 
-Next we're going to install a couple helper tools.
-
-    # sudo yum install git
-    $ git clone https://github.com/cybera/ipv6-system /home/root/ipv6/
-
-Be sure to record your VM's IP addresses:
-
-    $ /usr/sbin/ifconfig
+    $ /sbin/ifconfig
+    $ ~/ipv6-workshop-master/scripts/setIPs.sh
 

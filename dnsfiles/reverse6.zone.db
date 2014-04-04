@@ -14,5 +14,5 @@ $TTL 60
       IN     NS     dns1.example.com.
       IN     NS     dns2.example.com.
 
-;1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.0.0.9.6.0.0.f.8.f.7.0.6.2.ip6.arpa    IN  PTR ipv6example.example.com.
+;1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.0.0.9.6.0.0.f.8.f.7.0.6.2.ip6.arpa.    IN  PTR ipv6example.example.com.
 

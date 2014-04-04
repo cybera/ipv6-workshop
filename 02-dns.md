@@ -14,7 +14,7 @@ We'll be using BIND as our workshop demo program. As the de facto standard on *N
 
 ### Installation
 
-    yum install bind*
+    # sudo yum install bind
 
 This installs BIND 9.3.6.
 
@@ -42,15 +42,7 @@ For IPv6 they follow the same reverse notation seen with IPv4 with a slightly di
 
 Eg. `2607:f8f0:690:0010::1`'s PTR record would be `1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.0.0.9.6.0.0.f.8.f.7.0.6.2.ip6.arpa`
 
-On our VMs you can install [ipv6calc](http://www.deepspace6.net/projects/ipv6calc.html) by doing the following:
-
-    $ wget ftp://ftp.deepspace6.net/pub/ds6/sources/ipv6calc/ipv6calc-0.96.0.tar.gz
-    $ tar xzf ipv6calc-0.96.0.tar.gz
-    $ cd ipv6calc-0.96.0
-    $ ./configure && make
-    $ sudo cp ipv6calc/ipv6calc /usr/local/bin
-
-Or use an online tool such as [rDNS6](http://rdns6.com/hostRecord)
+On our VMs you can install a calculator [ipv6calc](http://www.deepspace6.net/projects/ipv6calc.html) or the much more recommended option is to use an online tool such as [rDNS6](http://rdns6.com/hostRecord)
 
 (NOTE: Using $ORIGIN in your bind configuration files can save some typing just as it does for IPv4)
 
@@ -71,16 +63,39 @@ Translation: Treat any mail that says it's from example.com as valid if it's com
 
 Setting up BIND to listen and work over IPv6 is very straight forward. To save time we've created a default named.conf that removes the extraneous portions that we won't use for our demo. The change to note that we made was to add: `listen-on-v6 {any};`. I don't recommend using that value in production unless you're managing DNS traffic via your firewall.
 
-    # cp /usr/share/doc/bind-9.3.6/sample/etc/* /etc
-    # cp -r /usr/share/doc/bind-9.3.6/sample/var/named/* /var/named/
-    # cp /home/v6guru/ipv6/dnsfiles/named.conf /etc/named.conf
-    # cat /etc/named.conf
+BIND uses text files for configuration and on our VMs they are stored in the mouthful of `/var/named/chroot/var/named` and `/var/named/chroot/etc/`. The chroot portion is a method of securing BIND so that the process can't access any files outside of it's directories.
+
+
+    # sudo cp /usr/share/doc/bind-9.3.6/sample/etc/* /var/named/chroot/etc
+    # sudo cp -r /usr/share/doc/bind-9.3.6/sample/var/named/* /var/named/chroot/var/named/
+    # sudo cp /home/v6guru/ipv6-workshop-master/dnsfiles/named.conf /var/named/chroot/etc/named.conf
+    # sudo less /var/named/chroot/etc/named.conf
 
 Next we need to set up our actual zones. We have stubs set up that can be copied in place and edited:
 
-    # cp /home/v6guru/ipv6/dnsfiles/*zone* /var/named/
+    # sudo cp /home/v6guru/ipv6-workshop-master/dnsfiles/*zone* /var/named/chroot/var/named/
 
-Edit the zone files to match your subnets. And then we can turn on BIND
+Next we are going to edit the zone files to match your subnets. You can use your preferred text editor (`vi`, `emacs`, and `nano` are installed by default)
+
+The 3 files in `/var/named/` we care about are the `example.zone.db`, `reverse.zone.db`, and `reverse6.zone.db`.
+
+`example.zone.db` is a generic zone file that turns a hostname into a usable IPv4 or IPv6 address.  
+`reverse.zone.db` is a reverse DNS zone to determine the hostname from an **IPv4** address.  
+`reverse6.zone.db` is a reverse DNS zone to determine the hostname from an **IPv6** address.
+
+To edit the files:
+
+    # sudo nano /var/named/chroot/var/named/example.zone.db
+
+We need to edit this file to establish what our IP should be for our hostname. Change clientA to your client number.
+
+    # sudo nano /var/named/chroot/var/named/reverse.zone.db
+
+We also need to edit the reverse zones to include our IPs. Reverse DNS is essential for some services, and for verfication that a hostname and an IP (v4 or v6) match.
+
+    # sudo nano /var/named/chroot/var/named/reverse6.zone.db
+
+And then we can turn on BIND
 
     # /etc/init.d/named restart
 
@@ -90,11 +105,10 @@ The concepts are the same for other DNS packages but the steps may be slightly d
 
 ## Exercises
 
-Using BIND 9 - try adding some records to your zone file and use dig on your local computer to make sure they resolve correctly.
+On your VM you can use `dig @127.0.0.1 QUERY` or `dig @VM_IP QUERY` on your own laptop to use the client VM as your DNS server. You need to specify your record if you don't want the standard A record. (eg. `dig @127.0.0.1 -t AAAA dual.example.com`)
 
-On your VM you can use `dig @127.0.0.1 QUERY` or `dig @VM_IP QUERY` on your own laptop to use the client VM as your DNS server.
-
-For doing reverse IP looks up you'll need to do something  similar to specify which DNS server to use to get our "fake" settings instead of the real answer:
+  * Using BIND 9 - try adding some records to your zone file and use dig on your local computer to make sure they resolve correctly.
+  * For doing reverse IP looks up you'll need to do something  similar to specify which DNS server to use to get our "fake" settings instead of the real answer:
 
     host QUERY CLIENT_VM
     host 2607:f8f0:690:0070::5 CLIENT_VM
@@ -103,6 +117,7 @@ For the next section be sure to add:
 
   * ipv4.example.com with the IPv4 address of your VM
   * ipv6.example.com with the IPv6 address of your VM
-  * www.example.com with *both* the IPv4 and IPv6 addresses of your VM
+  * dual.example.com with *both* the IPv4 and IPv6 addresses of your VM
   * Reverse DNS for the above 4 entries.
+  * What happens if you run `dig @127.0.0.1 ipv6.example.com`? Why doesn't it return an address?
 

@@ -1,10 +1,10 @@
 # Mail
 
-For simplicity we use Postfix in our example.
+In this module we are going to install and configure a mail server (Postfix) on our VM. Like our other modules, adding IPv6 support is "easy" - the tools are available and do support IPv6 but they require testing and some planning. Unlike other modules, mail support has some interesting edge and use cases when it comes to interacting with other servers.
 
 ## Installation
 
-    yum install postfix
+    #sudo yum install -y postfix
 
 
 ## Configuration

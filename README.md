@@ -12,6 +12,12 @@ Installing and configuring DNS for IPv6.
 
 ## 03-web.md
 
-## 04-mail.md
+Installing and configuring nginx and Apache for IPv6.
 
-## 05-firewalls.md
+## 04-firewall.md
+
+An introduction to using firewalls with IPv6.
+
+## 05-mail.md
+
+Installing and configuing postfix for IPv6.

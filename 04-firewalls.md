@@ -13,7 +13,6 @@ By default you'll see no rules exist so nothing is blocked, and the default filt
     # sudo /sbin/iptables -L
     # sudo /sbin/ip6tables -L
 
-
 If there are defined rules you can run `/sbin/iptables -F; /sbin/iptables -X;` to flush and delete the existing rules.
 
 The rules for IPv4 and completely separate from the rules for IPv6 allowing you to create customized rules for either flavour. The difference is entirely which command, and what type of address is being used. `iptables` rule chains are made of INPUTs, OUTPUTs, and FORWARDs.
@@ -22,22 +21,23 @@ A couple sample rules to hilight the differences:
 
   * Blocking the entire IPv6 Address Prefix for Documentation from our VM:
 
-    sudo /sbin/ip6tables -A INPUT -s 2001:DB8::/32 -j DROP
+    # sudo /sbin/ip6tables -A INPUT -s 2001:DB8::/32 -j DROP
 
   * Blocking an entire block of IPv4 addresses from our VM:
 
-    sudo /sbin/iptables -A INPUT -s 192.168.253.0/24 -j DROP
-
-  * Block a single I
+    # sudo /sbin/iptables -A INPUT -s 192.168.253.0/24 -j DROP
 
 If we then run `/sbin/ip6tables -L` and `/sbin/iptables -L` we can see the rules.
 
   * Allowing anyone to SSH in over IPv4 or IPv6
 
-    sudo /sbin/iptables -A INPUT -i eth0  -p tcp -dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
-    sudo /sbin/iptables -A OUTPUT -p tcp -sport 22 -m state --state ESTABLISHED -j ACCEPT
-    sudo /sbin/ip6tables -A INPUT -i eth0  -p tcp -dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
-    sudo /sbin/ip6tables -A OUTPUT -p tcp -sport 22 -m state --state ESTABLISHED -j ACCEPT
+    # sudo /sbin/iptables -A INPUT  -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+    # sudo /sbin/iptables -A OUTPUT -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
+    # sudo /sbin/ip6tables -A INPUT  -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+    # sudo /sbin/ip6tables -A OUTPUT -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
+
+    # sudo /sbin/iptables -L
+    # sudo /sbin/ip6tables -L
 
 ## ufw
 

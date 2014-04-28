@@ -32,4 +32,10 @@ When trying to send email via IPv6 from any host: [Google Support](https://suppo
 
 We need to add the inet_protocols line, while inet_interfaces is already correctly defined.
 
-That's all that needs to be done on Postifx to get it up and running on IPv6! 
+    inet_protocols = all
+
+OR
+
+    inet_protocols = ipv4, ipv6
+
+By default Postfix only works over IPv4 - so without that line it won't work. But that's all that needs to be done on Postifx to get it up and running on IPv6! 
